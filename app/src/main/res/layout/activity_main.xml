@@ -9,12 +9,14 @@
     tools:context=".MainActivity">
 
     <!--recycler view to display our data-->
+
+
+    <!--fab to add new courses-->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/idRVForm"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <!--fab to add new courses-->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/idFABAdd"
         android:layout_width="wrap_content"
@@ -27,5 +29,27 @@
         android:layout_marginBottom="18dp"
         android:src="@android:drawable/ic_input_add"
         app:tint="@color/white" />
+    <TextView
+        android:id="@+id/clickImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/imageView"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="62dp"
+        android:layout_marginBottom="2dp"
+        android:text="Click Button"
+        android:textStyle="italic|bold"
+        android:visibility="visible" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="64dp"
+        android:layout_height="77dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="75dp"
+        android:layout_marginBottom="72dp"
+        android:src="@drawable/untitled_design_removebg_preview"
+        android:visibility="visible" />
 
 </RelativeLayout>

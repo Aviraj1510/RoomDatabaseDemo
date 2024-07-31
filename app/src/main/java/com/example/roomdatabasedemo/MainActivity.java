@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -26,7 +28,8 @@ public class MainActivity extends AppCompatActivity {
     private static final int ADD_FORM_REQUEST = 1;
     private static final int EDIT_FORM_REQUEST = 2;
     private ViewModal viewmodal;
-
+    TextView clickText;
+    ImageView clickImg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +38,9 @@ public class MainActivity extends AppCompatActivity {
 
         formRV = findViewById(R.id.idRVForm);
         FloatingActionButton fab = findViewById(R.id.idFABAdd);
+        clickText = findViewById(R.id.clickImage);
+        clickImg = findViewById(R.id.imageView);
+
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -50,13 +56,11 @@ public class MainActivity extends AppCompatActivity {
         final RVFormViewAdapter adapter = new RVFormViewAdapter();
         formRV.setAdapter(adapter);
         viewmodal = ViewModelProviders.of(this).get(ViewModal.class);
-        viewmodal.getAllForm().observe(this, new Observer<List<DetailsModal>>() {
-            @Override
-            public void onChanged(List<DetailsModal> models) {
-                // when the data is changed in our models we are
-                // adding that list to our adapter class.
-                adapter.submitList(models);
-            }
+        viewmodal.getAllForm().observe(this, models -> {
+            // when the data is changed in our models we are
+            // adding that list to our adapter class.
+            adapter.submitList(models);
+            updateHintVisibility(models);
         });
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
             @Override
@@ -119,6 +123,16 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, "Course updated", Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(this, "Course not saved", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void updateHintVisibility(List<DetailsModal> models) {
+        if (models.isEmpty()) {
+            clickText.setVisibility(View.VISIBLE);
+            clickImg.setVisibility(View.VISIBLE);
+        } else {
+            clickText.setVisibility(View.GONE);
+            clickImg.setVisibility(View.GONE);
         }
     }
 }
