@@ -2,9 +2,11 @@ package com.example.roomdatabasedemo;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,7 +15,8 @@ import androidx.appcompat.app.AppCompatActivity;
 public class NewFormActivity extends AppCompatActivity {
 
     private EditText NameEdt, EmailEdt, PhoneNumberEdt;
-    Button SaveForm;
+    Button SaveForm, ShareForm;
+
 
     public static final String EXTRA_ID = "ID";
     public static final String EXTRA_NAME = "NAME";
@@ -30,6 +33,7 @@ public class NewFormActivity extends AppCompatActivity {
         EmailEdt = findViewById(R.id.idEdtEmail);
         PhoneNumberEdt = findViewById(R.id.idEdtPhoneNumber);
         SaveForm = findViewById(R.id.idBtnSaveForm);
+        ShareForm = findViewById(R.id.idBtnShareForm);
 
         Intent intent = getIntent();
 
@@ -48,9 +52,30 @@ public class NewFormActivity extends AppCompatActivity {
 
                 if (EmpName.isEmpty() || EmpEmail.isEmpty() || EmpPhoneNumber.isEmpty()){
                     Toast.makeText(NewFormActivity.this, "Please enter the valid Form details.", Toast.LENGTH_SHORT).show();
-                    return;
+                } else {
+                    SaveForm(EmpName, EmpEmail, EmpPhoneNumber);
+                    Intent intent1 = new Intent(NewFormActivity.this, MainActivity.class);
+                    startActivity(intent1);
+                    finish();
+
                 }
-                SaveForm(EmpName, EmpEmail, EmpPhoneNumber);
+                Log.d("Add", "The Detail: " + EmpName + EmpEmail + EmpPhoneNumber);
+            }
+        });
+
+        ShareForm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent sendIntent = new Intent();
+                sendIntent.setAction(Intent.ACTION_SEND);
+                String combinedText = "Name: " + NameEdt.getText().toString() + "\n" +
+                        "Email: " + EmailEdt.getText().toString() + "\n" +
+                        "Phone Number: " + PhoneNumberEdt.getText().toString();
+
+                sendIntent.putExtra(Intent.EXTRA_TEXT, combinedText);
+                sendIntent.setType("text/plain");
+                Intent.createChooser(sendIntent,"Share via");
+                startActivity(sendIntent);
             }
         });
     }

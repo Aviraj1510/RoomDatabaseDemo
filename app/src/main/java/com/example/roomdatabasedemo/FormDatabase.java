@@ -9,11 +9,11 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-@Database(entities = {DetailsModal.class}, version = 4)
+@Database(entities = {DetailsModal.class}, version = 5)
 public abstract class FormDatabase extends RoomDatabase {
 
     private static FormDatabase instance;
-    public abstract Dao Dao();
+    public abstract Dao dao();
 
     public static synchronized FormDatabase getInstance(Context context){
         if (instance == null){
@@ -34,8 +34,9 @@ public abstract class FormDatabase extends RoomDatabase {
         }
     };
     private static class PopulateDbAsyncTask extends AsyncTask<Void, Void, Void> {
-        PopulateDbAsyncTask(FormDatabase instance) {
-            Dao dao = instance.Dao();
+        private Dao dao;
+        PopulateDbAsyncTask(FormDatabase db) {
+            dao = db.dao();
         }
         @Override
         protected Void doInBackground(Void... voids) {

@@ -11,10 +11,12 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class RVFormViewAdapter extends ListAdapter<DetailsModal, RVFormViewAdapter.ViewHolder> {
 
     private OnItemClickListener listener;
-
     RVFormViewAdapter(){
         super(DIFF_CALLBACK);
     }
@@ -54,6 +56,8 @@ public class RVFormViewAdapter extends ListAdapter<DetailsModal, RVFormViewAdapt
     public DetailsModal getFormAt(int position) {
         return getItem(position);
     }
+
+
 
     public class ViewHolder extends RecyclerView.ViewHolder{
 

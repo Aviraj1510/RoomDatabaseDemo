@@ -21,6 +21,7 @@ public class ViewModal extends AndroidViewModel {
     }
 
     public void insert(DetailsModal modal){
+
         repository.insert(modal);
     }
     public void update(DetailsModal modal){
@@ -35,6 +36,9 @@ public class ViewModal extends AndroidViewModel {
 
     public LiveData<List<DetailsModal>>getAllForm(){
         return allForm;
+    }
+    public LiveData<List<DetailsModal>> searchDetails(String query) {
+        return repository.searchDetails(query);
     }
 
 

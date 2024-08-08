@@ -13,7 +13,7 @@ public class FormRepository {
 
     public FormRepository(Application application) {
         FormDatabase database = FormDatabase.getInstance(application);
-        dao = database.Dao();
+        dao = database.dao();
         allDetail = dao.getAllDetail();
     }
     public void insert(DetailsModal model) {
@@ -33,6 +33,9 @@ public class FormRepository {
     public LiveData<List<DetailsModal>> getAllDetail(){
 
         return allDetail;
+    }
+    public LiveData<List<DetailsModal>> searchDetails(String query) {
+        return dao.searchDetails(query);
     }
 
 //Async Task Method For Insert Form

@@ -26,4 +26,6 @@ public interface Dao {
     @Query("SELECT * FROM form_table ORDER BY Name ASC")
     LiveData<List<DetailsModal>> getAllDetail();
 
+    @Query("SELECT * FROM form_table WHERE Name LIKE '%' || :searchQuery || '%' ORDER BY Name ASC")
+    LiveData<List<DetailsModal>> searchDetails(String searchQuery);
 }

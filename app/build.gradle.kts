@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.android.application)
+    alias(libs.plugins.google.gms.google.services)
 }
 
 android {
@@ -34,6 +35,7 @@ android {
 dependencies {
 
     implementation (libs.room.runtime)
+    implementation(libs.firebase.firestore)
     annotationProcessor (libs.room.compiler)
     implementation (libs.lifecycle.extensions)
     annotationProcessor (libs.lifecycle.compiler)

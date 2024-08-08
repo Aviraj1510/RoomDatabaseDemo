@@ -1,17 +1,23 @@
 package com.example.roomdatabasedemo;
 
+import static java.util.Locale.filter;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageView;
+
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -19,6 +25,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -30,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
     private ViewModal viewmodal;
     TextView clickText;
     ImageView clickImg;
+    SearchView searchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +48,20 @@ public class MainActivity extends AppCompatActivity {
         FloatingActionButton fab = findViewById(R.id.idFABAdd);
         clickText = findViewById(R.id.clickImage);
         clickImg = findViewById(R.id.imageView);
+        searchView = findViewById(R.id.searchView);
+
+
+        final RVFormViewAdapter adapter = new RVFormViewAdapter();
+        formRV.setAdapter(adapter);
+
+        viewmodal = new ViewModelProvider(this).get(ViewModal.class);
+        viewmodal.getAllForm().observe(this, new Observer<List<DetailsModal>>() {
+            @Override
+            public void onChanged(List<DetailsModal> models) {
+                adapter.submitList(models);
+                updateHintVisibility(models);
+            }
+        });
 
 
         fab.setOnClickListener(new View.OnClickListener() {
@@ -50,11 +72,31 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                // Update the list based on search query
+                viewmodal.searchDetails(newText).observe(MainActivity.this, new Observer<List<DetailsModal>>() {
+                    @Override
+                    public void onChanged(List<DetailsModal> models) {
+                        adapter.submitList(models);
+                    }
+                });
+                return true;
+            }
+        });
+
+
+
         formRV.setLayoutManager(new LinearLayoutManager(this));
         formRV.setHasFixedSize(true);
 
-        final RVFormViewAdapter adapter = new RVFormViewAdapter();
-        formRV.setAdapter(adapter);
         viewmodal = ViewModelProviders.of(this).get(ViewModal.class);
         viewmodal.getAllForm().observe(this, models -> {
             // when the data is changed in our models we are
@@ -72,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
                 // on recycler view item swiped then we are deleting the item of our recycler view.
                 viewmodal.Delete(adapter.getFormAt(viewHolder.getAdapterPosition()));
-                Toast.makeText(MainActivity.this, "Course deleted", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "Form deleted", Toast.LENGTH_SHORT).show();
             }
         }).attachToRecyclerView(formRV);
         adapter.setOnItemClickListener(new RVFormViewAdapter.OnItemClickListener() {
@@ -97,6 +139,11 @@ public class MainActivity extends AppCompatActivity {
                 startActivityForResult(intent, EDIT_FORM_REQUEST);
             }
         });
+
+
+
+
+
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -107,11 +154,11 @@ public class MainActivity extends AppCompatActivity {
             String PhoneNumber = data.getStringExtra(NewFormActivity.EXTRA_PHONENUMBER);
             DetailsModal model = new DetailsModal(Name, Email, PhoneNumber);
             viewmodal.insert(model);
-            Toast.makeText(this, "Course saved", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Form saved", Toast.LENGTH_SHORT).show();
         } else if (requestCode == EDIT_FORM_REQUEST && resultCode == RESULT_OK) {
             int id = data.getIntExtra(NewFormActivity.EXTRA_ID, -1);
             if (id == -1) {
-                Toast.makeText(this, "Course can't be updated", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Form can't be updated", Toast.LENGTH_SHORT).show();
                 return;
             }
             String Name = data.getStringExtra(NewFormActivity.EXTRA_NAME);
@@ -120,9 +167,9 @@ public class MainActivity extends AppCompatActivity {
             DetailsModal model = new DetailsModal(Name, Email, PhoneNumber);
             model.setId(id);
             viewmodal.update(model);
-            Toast.makeText(this, "Course updated", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Form updated", Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(this, "Course not saved", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Form not saved", Toast.LENGTH_SHORT).show();
         }
     }
 
