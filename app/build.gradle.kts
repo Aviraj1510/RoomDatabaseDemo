@@ -34,8 +34,12 @@ android {
 
 dependencies {
 
+
+
     implementation (libs.room.runtime)
     implementation(libs.firebase.firestore)
+    implementation(libs.firebase.auth)
+    implementation(libs.firebase.database)
     annotationProcessor (libs.room.compiler)
     implementation (libs.lifecycle.extensions)
     annotationProcessor (libs.lifecycle.compiler)

@@ -1,4 +1,4 @@
-package com.example.roomdatabasedemo;
+package com.example.roomdatabasedemo.adapter;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,13 +11,13 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.example.roomdatabasedemo.R;
+import com.example.roomdatabasedemo.modal.DetailsModal;
 
 public class RVFormViewAdapter extends ListAdapter<DetailsModal, RVFormViewAdapter.ViewHolder> {
 
     private OnItemClickListener listener;
-    RVFormViewAdapter(){
+    public RVFormViewAdapter(){
         super(DIFF_CALLBACK);
     }
     private static final DiffUtil.ItemCallback<DetailsModal> DIFF_CALLBACK = new DiffUtil.ItemCallback<DetailsModal>() {

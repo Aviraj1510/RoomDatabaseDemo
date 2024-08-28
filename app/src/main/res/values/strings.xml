@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">RoomDatabaseDemo</string>
+    <string name="app_name">Notes</string>
     <string name="phone_number">Phone Number</string>
     <string name="email">Email</string>
     <string name="name">Name</string>

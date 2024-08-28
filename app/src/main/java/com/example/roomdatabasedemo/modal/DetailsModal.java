@@ -1,4 +1,4 @@
-package com.example.roomdatabasedemo;
+package com.example.roomdatabasedemo.modal;
 
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;

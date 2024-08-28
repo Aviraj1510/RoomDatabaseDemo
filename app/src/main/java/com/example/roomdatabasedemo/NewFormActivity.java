@@ -1,6 +1,7 @@
 package com.example.roomdatabasedemo;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -10,6 +11,10 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.room.Room;
+
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 
 public class NewFormActivity extends AppCompatActivity {
@@ -49,15 +54,10 @@ public class NewFormActivity extends AppCompatActivity {
                 String EmpName = NameEdt.getText().toString();
                 String EmpEmail = EmailEdt.getText().toString();
                 String EmpPhoneNumber = PhoneNumberEdt.getText().toString();
-
                 if (EmpName.isEmpty() || EmpEmail.isEmpty() || EmpPhoneNumber.isEmpty()){
                     Toast.makeText(NewFormActivity.this, "Please enter the valid Form details.", Toast.LENGTH_SHORT).show();
                 } else {
                     SaveForm(EmpName, EmpEmail, EmpPhoneNumber);
-                    Intent intent1 = new Intent(NewFormActivity.this, MainActivity.class);
-                    startActivity(intent1);
-                    finish();
-
                 }
                 Log.d("Add", "The Detail: " + EmpName + EmpEmail + EmpPhoneNumber);
             }
@@ -80,7 +80,7 @@ public class NewFormActivity extends AppCompatActivity {
         });
     }
 
-    private void SaveForm(String EmpName, String EmpEmail, String EmpPhoneNumber){
+    private void SaveForm(String EmpName, String EmpEmail, String EmpPhoneNumber) {
         Intent data = new Intent();
         data.putExtra(EXTRA_NAME, EmpName);
         data.putExtra(EXTRA_EMAIL, EmpEmail);

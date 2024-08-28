@@ -4,9 +4,10 @@ import static java.util.Locale.filter;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ImageView;
 
 import android.widget.TextView;
@@ -16,6 +17,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
@@ -23,9 +25,12 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.roomdatabasedemo.adapter.RVFormViewAdapter;
+import com.example.roomdatabasedemo.modal.DetailsModal;
+import com.example.roomdatabasedemo.modal.ViewModal;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -38,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
     TextView clickText;
     ImageView clickImg;
     SearchView searchView;
-
+    Toolbar toolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +54,9 @@ public class MainActivity extends AppCompatActivity {
         clickText = findViewById(R.id.clickImage);
         clickImg = findViewById(R.id.imageView);
         searchView = findViewById(R.id.searchView);
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
 
 
         final RVFormViewAdapter adapter = new RVFormViewAdapter();
@@ -145,7 +153,31 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.settings, menu);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if(id == R.id.logout){
+            FirebaseAuth.getInstance().signOut();
+            Intent intent = new Intent(MainActivity.this, LoginRegister.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            finish();
+            Toast.makeText(this, "Logout", Toast.LENGTH_SHORT).show();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+        @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == ADD_FORM_REQUEST && resultCode == RESULT_OK) {
